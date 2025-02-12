@@ -1,0 +1,13 @@
+CREATE TABLE default.data_table ON CLUSTER 'production'
+(
+    id UInt32,
+    name String,
+    age UInt32
+)
+ENGINE = ReplicatedMergeTree('/clickhouse/tables/{shard}/default/data_table', '{replica}')
+ORDER BY id
+
+
+CREATE TABLE default.data_table_distributed ON CLUSTER 'production'
+AS default.data_table
+ENGINE = Distributed('production', 'default', 'data_table', rand());

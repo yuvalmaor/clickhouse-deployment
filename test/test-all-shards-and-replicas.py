@@ -40,7 +40,7 @@ client = Client('localhost', port=myport, user='default', password='', database=
 # for row in result:
 #     print(row)
 #client.execute('DROP TABLE IF EXISTS test_table')
-result = client.execute('SHOW CREATE TABLE  test_table')
+result = client.execute('SHOW CREATE TABLE  trips')
 print(result)
 ports=["9000","9002","9003","9004","9005"]
 
@@ -48,7 +48,7 @@ for myport in ports:
     print("**************\nmyport:", myport)
     try:
         client = Client('localhost', port=myport, user='default', password='', database='default')
-        result = client.execute('SELECT * FROM default.data_table')
+        result = client.execute('SELECT * FROM trips')
         #print("mypoort:", myport)
         # 4. Print the result
         print("Data in data_table:")

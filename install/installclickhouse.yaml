@@ -5,6 +5,14 @@ metadata:
 spec:
   defaults:
   configuration:
+    settings:
+      # listen clickhosue-server embedded prometheus endpoint
+      prometheus/endpoint: /metrics
+      prometheus/port: 9363
+      prometheus/metrics: true
+      prometheus/events: true
+      prometheus/asynchronous_metrics: true
+      prometheus/status_info: true    
     #Configure external ZooKeeper (or ClickHouseKeeper if you use that CRD)
     zookeeper:
       nodes:
@@ -28,10 +36,18 @@ spec:
   templates:
     podTemplates:
       - name: clickhouse-stable
+        metadata:
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/path: "/metrics"
+            prometheus.io/port: "9363"
         spec:
           containers:
             - name: clickhouse
               image: altinity/clickhouse-server:24.3.5.47.altinitystable
+              ports:
+                - name: "metrics"
+                  containerPort: 9363
               volumeMounts:
                 - name: clickhouse-storage
                   mountPath: /var/lib/clickhouse
